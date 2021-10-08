@@ -21,6 +21,10 @@ library(datateachr)
 library(tidyverse)
 ```
 
+```{r}
+library(ggplot2)
+```
+
 3. Make a repository in the https://github.com/stat545ubc-2021 Organization. You will be working with this repository for the entire data analysis project. You can either make it public, or make it private and add the TA's and Vincenzo as collaborators. 
 
 4. When you go to submit, submit a URL to your repository to canvas. 
@@ -171,7 +175,7 @@ For the *vancouver_trees* dataset, I could explore the relationships between tre
 
 For the *apt_buildings* dataset, I could explore the relationship between building age and variables such as building height. I could also explore relationships between building height and other variables, such as ward, number of units, number of parking spaces. 
 
-I will work with *apt_buildings* because there I can form many hypotheses about possible relationships that might exist in the data, and would be interested in testing these hypotheses.
+I will work with *apt_buildings* because there I can form many hypotheses about possible relationships that might exist in the data, and would be interested in testing these hypotheses. The dataset also includes many variables with a variety of data types, allowing a large variety of relationships to be explored. And lastly, I grew up near Toronto and am very familiar with the city, which makes this dataset especially interesting and meaningful. 
 
 # Important note
 
@@ -195,6 +199,70 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 8. Use a density plot to explore any of your variables (that are suitable for this type of plot).
 
 2.2 For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
+
+2.2.1. Exploring the distribution of *no_of_storeys*
+
+I chose to explore the variable *no_of_storeys* using a histogram. This will allow me to gain an understanding of the range and distribution of the number of storeys that the buildings in the dataset have.  
+
+```{r}
+
+# Save the plot in a variable named apt_buidings_histogram
+# Specify apt_buildings as the dataset to plot and no_of_storeys as the aesthetic mapping
+# Specify geom_histogram() as the plot type
+
+(apt_buidings_histogram <- ggplot(apt_buildings, aes(no_of_storeys)) +
+   geom_histogram())
+```
+
+2.2.2. Creating a new variable: proportion of units that are accessible
+
+The proportion of units that are accessible, denoted f_accessible_units, can be calculated by dividing no_barrier_free_accessible_units by no_of_units. Compared to the absolute number of accessible units, this variable provides a more meaningful measure of a building's accessibility. 
+
+```{r}
+
+# Create a new tibble apt_buildings_new to house the existing data and new variable
+# Calculate f_accessible_units by dividing no_barrier_free_accessible_units by no_of_units
+# Place the new variable as the last column after the previous data
+# Use *head* to explore the new dataset
+
+apt_buildings_new <- apt_buildings %>%
+  mutate(f_accessible_units = no_barrier_free_accessible_units/no_of_units) %>%
+  select(id:no_barrier_free_accessible_units, f_accessible_units)
+
+head(apt_buildings_new)
+```
+
+2.2.3. Exploring the relationship between *no_of_units* and *no_of_storey*
+
+Because larger buildings can generally accommodate more units, it might be expected that a building with a larger number of stories can accomodate more units. This relationship was explored by creating a scatter plot of these two variables. 
+
+```{r}
+
+# Save the plot in a variable named apt_buildings_scatter_plot
+# Specify apt_buildings as the dataset to plot and no_of_storeys as the aesthetic mapping
+# Specify geom_histogram() as the plot type
+
+(apt_buildings_scatter_plot <- ggplot(apt_buildings) +
+    geom_point(aes(no_of_storeys, no_of_units), alpha = 0.2))
+
+```
+
+This plot shows that there is a moderate positive correlation between number of storeys and number of units. One notable outlier occurs with over 4000 units and 24 storeys. With many more units per storey than the other buildings, this building is presumably much longer and/or wider than the others. 
+
+2.2.4. Exploring the distribution of *year_built* in relation to *air_conditioning* 
+
+This analysis explores the distributions of buildings' age as seperated by the type of air conditioning in that building. For example, we might assume that older buildings are less likely to have central air conditioning. 
+
+```{r}
+
+# Save the plot in a variable named apt_buildings_scatter_plot
+# Specify apt_buildings as the dataset to plot and no_of_storeys as the aesthetic mapping
+# Specify geom_histogram() as the plot type
+
+(apt_buildings_density_plot <- ggplot(apt_buildings, aes(x = year_built)) + 
+    geom_density(aes(fill = air_conditioning), alpha = 0.3))
+```
+This visualization confirms there is a higher incidence of older buildings, particularly those built between about 1950 and 1975, that do not have air conditioning. In contrast, buildings with central air conditioning tend to be newer. 
 
 # Task 3: Write your research questions (5 points)
 
