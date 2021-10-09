@@ -173,7 +173,7 @@ I choose to consider *vancouver_trees* and *apt_buildings* because they are both
 
 For the *vancouver_trees* dataset, I could explore the relationships between tree height or diameter and other variables, such as tree species, neighbourhood, or tree age.
 
-For the *apt_buildings* dataset, I could explore the relationship between building age and variables such as building height. I could also explore relationships between building height and other variables, such as ward, number of units, number of parking spaces. 
+For the *apt_buildings* dataset, I could explore the relationship between building age and variables such as building height. I could also explore relationships between building height and other variables, such as ward, number of units, or number of parking spaces. 
 
 I will work with *apt_buildings* because there I can form many hypotheses about possible relationships that might exist in the data, and would be interested in testing these hypotheses. The dataset also includes many variables with a variety of data types, allowing a large variety of relationships to be explored. And lastly, I grew up near Toronto and am very familiar with the city, which makes this dataset especially interesting and meaningful. 
 
@@ -213,10 +213,12 @@ I chose to explore the variable *no_of_storeys* using a histogram. This will all
 (apt_buidings_histogram <- ggplot(apt_buildings, aes(no_of_storeys)) +
    geom_histogram())
 ```
+This plot shows that buildings are mostly only a few stories tall, with the large majority of the remaining buildings below 30 stories. 
+
 
 2.2.2. Creating a new variable: proportion of units that are accessible
 
-The proportion of units that are accessible, denoted f_accessible_units, can be calculated by dividing no_barrier_free_accessible_units by no_of_units. Compared to the absolute number of accessible units, this variable provides a more meaningful measure of a building's accessibility. 
+The proportion of units that are accessible, denoted f_accessible_units, can be calculated by dividing no_barrier_free_accessible_units by no_of_units. Compared to the absolute number of accessible units, this variable provides a more meaningful measure of a building's overall accessibility. 
 
 ```{r}
 
@@ -267,6 +269,27 @@ This visualization confirms there is a higher incidence of older buildings, part
 # Task 3: Write your research questions (5 points)
 
 So far, you have chosen a dataset and gotten familiar with it through exploring the data. Now it's time to figure out 4 research questions that you would like to answer with your data! Write the 4 questions and any additional comments at the end of this deliverable. These questions are not necessarily set in stone - TAs will review them and give you feedback; therefore, you may choose to pursue them as they are for the rest of the project, or make modifications!
+
+
+3.1. Research question 1: Investigating building age dependency of other columns
+
+Investigate whether other variables in the dataset depend on or correlate with the age of the building. For example, the analysis in section 2.2.4 seems to suggest that central air conditioning is most prevalent in newer buildings. Similarly, one could hypothesize that other factors such as accessible parking spaces, accessible units, or bike parking spaces might be more prevalent in newer buildings. 
+
+
+3.2. Research question 2: Investigating building number of units dependency of other columns
+
+Investigate whether other variables in the dataset depend on or correlate with the age of the building. For example, the analysis in section 2.2.3 seems to suggest that buildings with more units have more storeys. Similarly, one could hypothesize that other factors such as number of parking spaces might also positively correlate with number of units.  
+
+
+3.3. Research question 3: Investigating building height dependency of other columns
+
+Investigate whether other variables in the dataset depend on or correlate with the number of storeys. For example, one could hypothesize that factors such as number of elevators might positively correlate with the number of units.
+
+
+3.4. Research question 4: Investigating building location dependency of other columns
+
+Investigate whether other variables in the dataset depend on or correlate with the location of the building. For example, one could hypothesize that older buildings or buildings with more storeys or more units might be concentrated in certain locations. Because the dataset does not provide exact geographic coordinates, this question is less straightforward to answer than the previous three. For example, buildings could be grouped by their ward, providing a rough location. It might also be possible to extract the street name from the *site_address* variable. However, because streets in Toronto can be very long, grouping by street name might be an uninformative measure of location. 
+
 
 <!--- *****START HERE***** --->
 
