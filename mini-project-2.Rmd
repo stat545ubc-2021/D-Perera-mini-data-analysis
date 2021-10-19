@@ -99,7 +99,7 @@ Make sure it's clear what research question you are doing each operation for!
 
 This question will be investigated using options 3 and 5. 
 
-For option 3 (creating a categorical variable by grouping a numerical variable), building age will be grouped into categories by 25-year period. Groups will be: Pre-1900, 1900-1924, 1925-1949, 1950-1974, 1975-1999, and post-1999.
+For option 3 (creating a categorical variable by grouping a numerical variable), building age will be grouped into categories by 25-year period. Groups will be: 1899 & before, 1900-1924, 1925-1949, 1950-1974, 1975-1999, and 2000 & later.
 
 ```{r}
 # Use mutate function to assign age category to a new column named *age_cat*
@@ -125,23 +125,27 @@ For option 5 (creating a graph of the summarized variables with 2+ geom layers),
 # age category (x axis) in boxplot format.
 # Specify x and y axis labels and a title, and select *theme_bw* as the colour palette
 
-
 apt_buildings_age_cat %>%
   ggplot() + geom_boxplot(aes(x = age_cat, y = no_of_storeys)) +
-    labs(y = "Age range", x = "Number of floors") +
+    labs(y = "Number of floors", x = "Age range") +
     ggtitle("Number of floors distribution in each age range") +
     theme_bw() 
 
 ```
 
+This plot shows that there is a general increase in number of floors over time. However, there is little change in median number of floors until 1950. After 1950, the median number of floors increases somewhat. However, despite the moderate increase in mean after 1950, the most dramatic difference is the appearance of numerous outliers with as many as 40-50 floors. We might attribute this change to postwar changes in zoning rules and construction technology. 
 
-#### 1.2.2. Research question 2: Investigating the relationship between building height, number of units, and balconies
+
+#### 1.2.2. Research question 2: Investigating the relationship between number of storeys, number of units, and balconies
 
 This question will be investigated using options 1 and 7. 
 
 For option 1 (compute the range, mean, and two other summary stats of one numerical variable across categories), the summary stats will be calculated for the numerical variable number of units across the categories of balcony and no balcony. 
 
 ```{r}
+
+# The data set is grouped by the categories of the balconies column
+# The summarise function is then used to calculate the mean of each group
 
 (apt_buildings %>%
   group_by(balconies) %>%
@@ -150,6 +154,9 @@ For option 1 (compute the range, mean, and two other summary stats of one numeri
 ```
 
 ```{r}
+
+# The data set is grouped by the categories of the balconies column
+# The summarise function is then used to calculate the rage of each group
 
 (apt_buildings %>%
   group_by(balconies) %>%
@@ -160,6 +167,9 @@ For option 1 (compute the range, mean, and two other summary stats of one numeri
 
 ```{r}
 
+# The data set is grouped by the categories of the balconies column
+# The summarise function is then used to calculate the median of each group
+
 (apt_buildings %>%
   group_by(balconies) %>%
   summarise(no_of_units_median = median(no_of_units)))
@@ -168,6 +178,9 @@ For option 1 (compute the range, mean, and two other summary stats of one numeri
 
 ```{r}
 
+# The data set is grouped by the categories of the balconies column
+# The summarise function is then used to calculate the standard deviation of each group
+
 (apt_buildings %>%
   group_by(balconies) %>%
   summarise(no_of_units_sd = sd(no_of_units)))
@@ -175,7 +188,7 @@ For option 1 (compute the range, mean, and two other summary stats of one numeri
 ```
 
 
-For option 7 (graph with customized alpha transparency), a scatter plot will be created with number of units on the x axis and building height on the y axis. Two separate graphs will be created for buildings with balconies and no balconies. Alpha transparency will be applied to the data points to demonstrate density of observations. 
+For option 7 (graph with customized alpha transparency), a scatter plot will be created with number of units on the x axis and building height on the y axis. Separate graphs will be created for buildings with balconies and no balconies. Alpha transparency will be applied to the data points to demonstrate density of observations. 
 
 ```{r}
 
@@ -189,6 +202,9 @@ For option 7 (graph with customized alpha transparency), a scatter plot will be 
 
 ```
 
+This plot repeats the result from milestone 1 that number of units and number of storeys are positively correlated. In terms of balconies, it seems that buildings with balconies are somewhat more distributed in the higher range of units/floors than those without. 
+
+
 #### 1.2.3. Research question 3: Investigating building age dependency of air conditioning type
 
 This question will be investigated using options 1 and 5. 
@@ -196,6 +212,9 @@ This question will be investigated using options 1 and 5.
 For option 1 (compute the range, mean, and two other summary stats of one categorical variable), the summary stats will be calculated for the categories of air conditioning type.
 
 ```{r}
+
+# The data set is grouped by the categories of the air conditioning column
+# The summarise function is then used to calculate the mean of each group
 
 (apt_buildings %>%
   group_by(air_conditioning) %>%
@@ -205,6 +224,9 @@ For option 1 (compute the range, mean, and two other summary stats of one catego
 
 ```{r}
 
+# The data set is grouped by the categories of the air conditioning column
+# The summarise function is then used to calculate the range of each group
+
 (apt_buildings %>%
   group_by(air_conditioning) %>%
   summarise(year_built_range = range(year_built)))
@@ -213,6 +235,9 @@ For option 1 (compute the range, mean, and two other summary stats of one catego
 
 ```{r}
 
+# The data set is grouped by the categories of the air conditioning column
+# The summarise function is then used to calculate the median of each group
+
 (apt_buildings %>%
   group_by(air_conditioning) %>%
   summarise(year_built_median = median(year_built)))
@@ -220,6 +245,9 @@ For option 1 (compute the range, mean, and two other summary stats of one catego
 ```
 
 ```{r}
+
+# The data set is grouped by the categories of the air conditioning column
+# The summarise function is then used to calculate the standard deviation of each group
 
 (apt_buildings %>%
   group_by(air_conditioning) %>%
@@ -238,11 +266,15 @@ For option 5 (creating a graph of the summarized variables with 2+ geom layers),
 
 apt_buildings_age_cat %>%
   ggplot() + geom_boxplot(aes(x = air_conditioning, y = year_built)) +
-    labs(y = "Age range", x = "Type of Air Conditioning") +
+    labs(y = "Year built", x = "Type of Air Conditioning") +
     ggtitle("Age range distribution in each air conditioning category") +
     theme_bw() 
 
 ```
+
+This plot further demonstrates the trend that central air is more common in newer buildings, and very rare in buildings before 1950. Buildings with individual units have a slightly newer median construction year than those with no air conditioning. However, there are many more recent outliers in the *individual units* and *none* categories, showing that buildings with these air conditioning types are still being built.
+
+
 
 #### 1.2.4. Research question 4: Investigating the relationship between building height and ward
 
@@ -252,19 +284,26 @@ For option 2 (calculate number of observations for one categorical variable), th
 
 ```{r}
 
-count(apt_buildings, 'ward')
+# The count function is used to calculate the number of entries in each ward category. 
 
-#  ggplot(aes(ward)) + geom_bar(y = freq), position = "dodge")
+count(apt_buildings, 'ward')
 
 ```
 
-For option 6 (chosen graph with one log axis and "pretty labels), the distribution of buildings in each ward will be shown using a ridge plot. A horizontal log axis will be used to better display the higher density of observations at low numbers of floors. 
+For option 6 (chosen graph with one log axis and "pretty labels"), the distribution of buildings in each ward will be shown using a ridge plot.
 
 ```{r}
+
+# ggplot is used to create a plot with number of stories and ward as the x and y variables respectively
+# the ggridges package is loaded and the geom_density_ridges function is used to create the ridge plot
+
 apt_buildings %>% 
    ggplot(aes(no_of_storeys, ward)) +
    ggridges::geom_density_ridges()
 ```
+
+This plot shows interesting trends in frequency of number of storeys for each ward. Most wards show a hump around 4 storeys, with some showing additional smaller humps at values up to 20 storeys. This means that these neighbourhoods are mostly low-rise, with occasional taller buildings. However, certain wards such as 17, 22, 23, and 24 do not show the hump around 4 storeys, and instead show humps at values up to 20 storeys. This indicates that these are higher density neighbourhoods, potentially high-rise social housing projects. 
+
 
 <!----------------------------------------------------------------------------->
 
@@ -274,9 +313,7 @@ Based on the operations that you've completed, how much closer are you to answer
 
 <!------------------------- Write your answer here ---------------------------->
 
-Floors - age range
-
-Floors - location
+These results provide useful answers to the four research questions addressed in this analysis. However, more detailed investigates of all four relationships are still possible. Research questions 3 and 4 are yielding particularly interesting results, with various questions left to investigate further. 
 
 <!----------------------------------------------------------------------------->
 
@@ -313,24 +350,38 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 <!--------------------------- Start your work below --------------------------->
 
 ```{r}
+# To simplify, select only 8 columns of the table. 
 
 selected_apt_buildings <- select(apt_buildings, id, separate_gas_meters, separate_hydro_meters, separate_water_meters, no_of_units, ward, air_conditioning, heating_type)
+
+head(selected_apt_buildings)
+
+```
+
+
+```{r}
+
+# Because the data is already tidy, choose to untidy by adding separate rows for each apartment building's separate utility meters
 
 (untidy <- selected_apt_buildings %>%
   pivot_longer(cols = c(separate_gas_meters, separate_hydro_meters, separate_water_meters), 
                names_to  = "utility_meter", 
                values_to = "utility_meter_separate"))
 
+head(untidy)
+
 ```
 
 ```{r}
+
+# Re-tidy by converting back to one type of utility meter per column
 
 re_tidy <- untidy %>%
     pivot_wider(id_cols = c(-utility_meter, -utility_meter_separate),
                 names_from = utility_meter,
                 values_from = utility_meter_separate)
 
-print(re_tidy)
+head(re_tidy)
 
 ```
 
@@ -343,6 +394,41 @@ Now, you should be more familiar with your data, and also have made progress in 
 Try to choose a version of your data that you think will be appropriate to answer these 2 questions in milestone 3. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelvant columns, etc.). 
 
 <!--------------------------- Start your work below --------------------------->
+
+
+
+Research questions 3 and 4 are yielding particularly interesting results, and there are still various questions left to investigate further. Therefore, these two questions will be investigated further in milestone 3. 
+
+The data is already correctly tidy'ed for the purpose of these questions. 
+
+To make a suitable data set for the questions, it is possible to drop all irrelevant columns. 
+
+```{r}
+
+apt_buildings_dropped <- select(apt_buildings, id, air_conditioning, ward, year_built, no_of_storeys, site_address, no_of_elevators, no_of_units)
+
+head(apt_buildings_dropped)
+
+```
+
+We can also create two separate data sets where the "YY" entries are dropped for *ward* and "NA" entries dropped for *air_conditioning*. 
+
+```{r}
+
+apt_buildings_no_YY <- filter(apt_buildings_dropped, ward != "YY")
+
+head(apt_buildings_no_YY)
+
+```
+
+
+```{r}
+
+apt_buildings_no_NA <- filter(apt_buildings_dropped, air_conditioning != "NA")
+
+head(apt_buildings_no_NA)
+
+```
 
 
 <!----------------------------------------------------------------------------->
