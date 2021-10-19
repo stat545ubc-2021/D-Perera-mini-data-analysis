@@ -17,6 +17,9 @@ Begin by loading your data and the tidyverse package below:
 library(datateachr) # <- might contain the data you picked!
 library(tidyverse)
 library(ggplot2)
+library(forcats)
+library(plyr)
+library(dplyr)
 ```
 
 # Learning Objectives
@@ -92,23 +95,99 @@ Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
 
-#### 1.2.1. Research question 1: Investigating the relationship between building age and building height
+#### 1.2.1. Research question 1: Investigating the relationship between building age and number of storeys
 
 This question will be investigated using options 3 and 5. 
 
-For option 3 (creating a categorical variable by grouping a numerical variable), building age will be grouped into categories by 25-year period. Groups will be: Pre-1900, 1900-1925, 1925-1950, 1950-1975, 1975-2000, and Post-2000.
+For option 3 (creating a categorical variable by grouping a numerical variable), building age will be grouped into categories by 25-year period. Groups will be: Pre-1900, 1900-1924, 1925-1949, 1950-1974, 1975-1999, and post-1999.
 
-For option 5 (creating a graph of the summarized variables with 2+ geom layers), a box plot will be created for building height in each age category. This plot will be overlaied with the raw datapoints.
+```{r}
+# Use mutate function to assign age category to a new column named *age_cat*
+# *case_when* determines the age range based on the value of *year_built*
+
+apt_buildings_age_cat <- apt_buildings %>%  
+  mutate(age_cat = case_when(year_built < 1900 ~ "1899 & before",
+                             year_built < 1925 ~ "1900-1924",
+                             year_built < 1950 ~ "1925-1950",
+                             year_built < 2000 ~ "1950-1999",
+                                TRUE ~ "2000 & later"))
+
+head(apt_buildings_age_cat)
+
+```
+
+
+For option 5 (creating a graph of the summarized variables with 2+ geom layers), a box plot will be created for number of storeys in each age category.
+
+```{r}
+
+# Use standard ggplot syntax to display the number of storeys (y axis) of each 
+# age category (x axis) in boxplot format.
+# Specify x and y axis labels and a title, and select *theme_bw* as the colour palette
+
+
+apt_buildings_age_cat %>%
+  ggplot() + geom_boxplot(aes(x = age_cat, y = no_of_storeys)) +
+    labs(y = "Age range", x = "Number of floors") +
+    ggtitle("Number of floors distribution in each age range") +
+    theme_bw() 
+
+```
 
 
 #### 1.2.2. Research question 2: Investigating the relationship between building height, number of units, and balconies
 
 This question will be investigated using options 1 and 7. 
 
-For option 1 (compute the range, mean, and two other summary stats of one categorical variable), the summary stats will be calculated for the categories of balcony and no balcony. 
+For option 1 (compute the range, mean, and two other summary stats of one numerical variable across categories), the summary stats will be calculated for the numerical variable number of units across the categories of balcony and no balcony. 
 
-For option 7 (graph with customized alpha transparency), a scatter plot will be created with number of units on the x axis and building height on the y axis. Two seperate graphs will be created for buildings with balconies and no balconies. Alpha transparency will be applied to the datapoints to demonstrate density of observations. 
+```{r}
 
+(apt_buildings %>%
+  group_by(balconies) %>%
+  summarise(no_of_units_mean = mean(no_of_units)))
+
+```
+
+```{r}
+
+(apt_buildings %>%
+  group_by(balconies) %>%
+  summarise(no_of_units_range = range(no_of_units)))
+
+```
+
+
+```{r}
+
+(apt_buildings %>%
+  group_by(balconies) %>%
+  summarise(no_of_units_median = median(no_of_units)))
+
+```
+
+```{r}
+
+(apt_buildings %>%
+  group_by(balconies) %>%
+  summarise(no_of_units_sd = sd(no_of_units)))
+
+```
+
+
+For option 7 (graph with customized alpha transparency), a scatter plot will be created with number of units on the x axis and building height on the y axis. Two separate graphs will be created for buildings with balconies and no balconies. Alpha transparency will be applied to the data points to demonstrate density of observations. 
+
+```{r}
+
+#(apt_buildings_scatter_plot <- ggplot(apt_buildings) +
+#    geom_point(aes(no_of_storeys, no_of_units), alpha = 0.2))
+
+(apt_buildings_scatter_plot <- ggplot(apt_buildings, aes(no_of_storeys, no_of_units)) +
+  geom_point(aes(color = balconies),
+            size = 3,
+            alpha = 0.4)) + facet_grid(balconies ~ .)
+
+```
 
 #### 1.2.3. Research question 3: Investigating building age dependency of air conditioning type
 
@@ -116,17 +195,76 @@ This question will be investigated using options 1 and 5.
 
 For option 1 (compute the range, mean, and two other summary stats of one categorical variable), the summary stats will be calculated for the categories of air conditioning type.
 
-For option 5 (creating a graph of the summarized variables with 2+ geom layers), a box plot will be created for building height in each age category. This plot will be overlaied with the raw datapoints.
+```{r}
 
+(apt_buildings %>%
+  group_by(air_conditioning) %>%
+  summarise(year_built_mean = mean(year_built)))
+
+```
+
+```{r}
+
+(apt_buildings %>%
+  group_by(air_conditioning) %>%
+  summarise(year_built_range = range(year_built)))
+
+```
+
+```{r}
+
+(apt_buildings %>%
+  group_by(air_conditioning) %>%
+  summarise(year_built_median = median(year_built)))
+
+```
+
+```{r}
+
+(apt_buildings %>%
+  group_by(air_conditioning) %>%
+  summarise(year_built_sd = sd(year_built)))
+
+```
+
+For option 5 (creating a graph of the summarized variables with 2+ geom layers), a box plot will be created for building height in each air conditioning category.
+
+```{r}
+
+# Use standard ggplot syntax to display the number of storeys (y axis) of each 
+# age category (x axis) in boxplot format.
+# Specify x and y axis labels and a title, and select *theme_bw* as the colour palette
+
+
+apt_buildings_age_cat %>%
+  ggplot() + geom_boxplot(aes(x = air_conditioning, y = year_built)) +
+    labs(y = "Age range", x = "Type of Air Conditioning") +
+    ggtitle("Age range distribution in each air conditioning category") +
+    theme_bw() 
+
+```
 
 #### 1.2.4. Research question 4: Investigating the relationship between building height and ward
 
 This question will be investigated using options 2 and 6.
 
-For option 2 (calculate number of observations for one categorical variable), the number of buildings in each ward will be computed. 
+For option 2 (calculate number of observations for one categorical variable), the number of buildings in each ward will be computed.  
+
+```{r}
+
+count(apt_buildings, 'ward')
+
+#  ggplot(aes(ward)) + geom_bar(y = freq), position = "dodge")
+
+```
 
 For option 6 (chosen graph with one log axis and "pretty labels), the distribution of buildings in each ward will be shown using a ridge plot. A horizontal log axis will be used to better display the higher density of observations at low numbers of floors. 
 
+```{r}
+apt_buildings %>% 
+   ggplot(aes(no_of_storeys, ward)) +
+   ggridges::geom_density_ridges()
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -136,6 +274,9 @@ Based on the operations that you've completed, how much closer are you to answer
 
 <!------------------------- Write your answer here ---------------------------->
 
+Floors - age range
+
+Floors - location
 
 <!----------------------------------------------------------------------------->
 
@@ -157,6 +298,7 @@ Based on the definition above, can you identify if your data is tidy or untidy? 
 
 <!--------------------------- Start your work below --------------------------->
 
+The data is currently in tidy form, because each row represents one observation (i.e. one apartment building). For that reason, it would not be reasonably possible to further reduce the number of rows. 
 
 <!----------------------------------------------------------------------------->
 
@@ -170,6 +312,27 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 
 <!--------------------------- Start your work below --------------------------->
 
+```{r}
+
+selected_apt_buildings <- select(apt_buildings, id, separate_gas_meters, separate_hydro_meters, separate_water_meters, no_of_units, ward, air_conditioning, heating_type)
+
+(untidy <- selected_apt_buildings %>%
+  pivot_longer(cols = c(separate_gas_meters, separate_hydro_meters, separate_water_meters), 
+               names_to  = "utility_meter", 
+               values_to = "utility_meter_separate"))
+
+```
+
+```{r}
+
+re_tidy <- untidy %>%
+    pivot_wider(id_cols = c(-utility_meter, -utility_meter_separate),
+                names_from = utility_meter,
+                values_from = utility_meter_separate)
+
+print(re_tidy)
+
+```
 
 <!----------------------------------------------------------------------------->
 
