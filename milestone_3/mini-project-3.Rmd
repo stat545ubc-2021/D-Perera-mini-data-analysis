@@ -68,22 +68,13 @@ But first, tasks 1 and 2 below ask you to modify a plot you made in a previous m
 
 ```{r}
 
-# entries with no ward specified ("YY") are removed using filter
-# ggplot is used to create a plot with number of stories and ward as the x and y variables respectively
-# the ggridges package is loaded and the geom_density_ridges function is used to create the ridge plot
-
-#apt_buildings %>%
-#  filter(ward != "YY") %>%
-#  ggplot(aes(no_of_storeys, ward)) +
-#  ggridges::geom_density_ridges()
-
-
 apt_buildings_age_cat <- apt_buildings %>%  
-  mutate(age_cat = case_when(year_built < 1900 ~ "1899 & before",
+  mutate(age_cat = case_when(year_built < 1900 ~ "pre-1899",
                              year_built < 1925 ~ "1900-1924",
-                             year_built < 1950 ~ "1925-1950",
-                             year_built < 2000 ~ "1950-1999",
-                                TRUE ~ "2000 & later"))
+                             year_built < 1950 ~ "1925-1949",
+                             year_built < 1975 ~ "1950-1974",
+                             year_built < 2000 ~ "1975-1999",
+                                TRUE ~ "post-2000"))
 
 apt_buildings_age_cat %>%
   ggplot() + geom_boxplot(aes(x = age_cat, y = no_of_storeys)) +
@@ -114,32 +105,37 @@ Now, choose two of the following tasks.
 
 Because the *apt_buildings* database doesn't have a time-based column more granular than a year, we can only address tasks 1 and 2. 
 
-Inspect the factor
+**Task Number**: 1
+
+Without using a factor, the age categories would be placed in alphabetical order. However, it would make more sense to the arrange the age categories chronologically. 
 
 ```{r}
 
-as.factor(apt_buildings$ward)
+# Commented out because it was producing an error when knitting. There is an error here, but it was not possible to correct before the deadline. 
+
+#apt_buildings_age_cat_fct <- apt_buildings %>% 
+#   mutate(age_cat = case_when(year_built < 1900 ~ "pre-1899",
+#                             year_built < 1925 ~ "1900-1924",
+#                             year_built < 1950 ~ "1925-1949",
+#                             year_built < 1975 ~ "1950-1974",
+#                             year_built < 2000 ~ "1975-1999",
+#                                TRUE ~ "post-2000"),
+#                 levels = c('pre-1899', '1900-1924', '1925-1949', '1950-1974', '1975-1999', 'post-2000'))
+
+# as.factor(apt_buildings_age_cat$age_cat)
+
+apt_buildings_age_cat %>%
+  ggplot() + geom_boxplot(aes(x = age_cat, y = no_of_storeys)) +
+    labs(y = "Number of floors", x = "Age range") +
+    ggtitle("Number of floors distribution in each age range") +
+    theme_bw() 
 
 ```
 
-### Task #1
-
-
-
-### Task #2
-
-Worksheet 5
-
-Don't have that date format, have to do 1 & 2
-
-**Task Number**: 1
-
-
-
-
 **Task Number**: 2
 
-
+If we were mostly interested in examining apartment buildings after 1950, we could group all of the pre-1950 data together. 
+This would produce a single column on the boxplot for all pre-1950 data.  
 
 <!----------------------------------------------------------------------------->
 
