@@ -7,7 +7,7 @@ The mini data analysis is an exercise that seeks to demonstrate various function
 For this analysis, the *apt_buildings* data set will be used. This data set is a list of apartment buildings in Toronto along with various attributes associated with them. 
 
 Project contents:
-- mini-project-1.Rmd contains the R markdown file for milestone 1 of the project. 
-- mini-project-2.Rmd contains the R markdown file for milestone 2 of the project. 
-- The corresponding .md files contain the knit markdown files for each Rmd file. 
-- The corresponding *files* folders contain the figures associated with the .md files. 
+- Folder *milestone_1* contains the files associated with milestone 1 of this project. 
+- Folder *milestone_2* contains the files associated with milestone 2 of this project. 
+- Folder *milestone_3* contains the files associated with milestone 3 of this project. 
+- Folder *output* contains the files produced from exercise 3 of milestone 3. 
